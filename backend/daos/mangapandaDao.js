@@ -5,17 +5,25 @@ var q = require('q');
 
 function getUrl(uri) {
 
-	var options = {
-  		host: "localhost",
-  		port: 8888,
-  		headers: {}
-	};
+	var options;
 
-	// proxy settings
-	options.path = uri;
-	options.headers.Host = url.parse(uri).host;
+	if(process.env.HTTP_PROXY) {
+		var proxyConfig = url.parse(process.env.HTTP_PROXY);
+
+		options = {};
+		options.host = proxyConfig.hostname;
+		options.port = proxyConfig.port;
+		options.path = uri;
+		options.headers = {
+			Host: url.parse(uri).host
+		}
+	} else {
+		options = uri;
+	}
 
 	var deferred = q.defer();
+
+	console.log('Calling to: ' + JSON.stringify(options));
 
 	var req = http.get(options, function(data) {
 			if (data.statusCode == 200) {
