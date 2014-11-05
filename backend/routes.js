@@ -7,15 +7,27 @@ exports.configure = function(app) {
 	});
 
 	app.get('/mangas', function(req, res) {
-		var result = mangapandaService.getMangaList();
+		var result = mangapandaService.getMangas();
 		result.then(function(d) {
-			console.log('no error');
-			res.json(d);
-		})
-		.fail(function(e) {
-			console.log('error');
+			res.send("<html><body><pre>" + JSON.stringify(d, null, 2) + "</pre></body></html>");
+		}, function(e) {
 			res.statusCode = 500;
 			res.send('There was an error: ' + e);
 		});
 	});
+
+	app.get('/mangas/:manga*', function(req, res) {
+		var mangaId = req.param('manga');
+
+		console.log(mangaId, unescape(mangaId));
+
+		var result = mangapandaService.getMangaIssues(mangaId);
+		result.then(function(d) {
+			res.send("<html><body><pre>" + JSON.stringify(d, null, 2) + "</pre></body></html>");
+		}, function(e) {
+			res.statusCode = 500;
+			res.send('There was an error: ' + e);
+		});
+	});
+
 }
