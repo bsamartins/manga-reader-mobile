@@ -16,7 +16,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.10.1",
+    "jsdom": "^1.2.0",
     "q": "^1.0.1",
-    "cheerio": "~0.17.0"
+    "request": "^2.47.0"
   }
 }

@@ -1,67 +1,59 @@
-var cheerio = require('cheerio');
-var http = require('http');
-var url = require('url');
 var q = require('q');
+var jsdom = require('jsdom');
+var request = require('request');
 
-function getUrl(uri) {
-
-	var options;
-
-	if(process.env.HTTP_PROXY) {
-		var proxyConfig = url.parse(process.env.HTTP_PROXY);
-
-		options = {};
-		options.host = proxyConfig.hostname;
-		options.port = proxyConfig.port;
-		options.path = uri;
-		options.headers = {
-			Host: url.parse(uri).host
-		}
-	} else {
-		options = uri;
-	}
-
+function getUrl2(uri, parseCallback) {
 	var deferred = q.defer();
 
-	console.log('Calling to: ' + JSON.stringify(options));
+	var options = {
+		'uri': uri
+	}
 
-	var req = http.get(options, function(res) {
-			var body = '';
+	request(options, function(error, response, body) {
+		if (error) {
+			deferred.reject(error);
+			console.log('Error when contacting: ', uri);
+			console.log(error);
+			return;	    					    
+  		}
 
-			res.on('data', function(chunk){
-				body += chunk;
-			});
+  		if(response && response.statusCode != 200) {
+  			deferred.reject(new Error());
+  			console.log('Error when contacting: ', uri, ' HTTP Status: ', response.statusCode);
+			return;
+  		}
 
-			res.on('end', function() {
-				if (res.statusCode == 200) {
-					deferred.resolve(body);
-				} else {
-					deferred.reject(new Error('Failed getting resource \'' + uri + '\', cause: ' + res.statusCode));	
-				}
-			});
-
-		})
-		.on('error', function(e) {
-			deferred.reject(e);
+		jsdom.env({
+			html: body,
+	  		scripts: ["http://code.jquery.com/jquery.js"],
+	  		done: function (errors, window) {
+	    		var $ = window.$;	    	
+	    		deferred.resolve($);
+	    	}	  	
 		});
-
-	req.end();
+	});
 
 	return deferred.promise;
 }
 
-
 exports.getMangas = function() {
-	var result = getUrl('http://www.mangareader.net/alphabetical')
-	.then(function(d) {
-		return extractMangas(d)
+	var result = getUrl2('http://www.mangareader.net/alphabetical')
+	.then(function($) {
+		return extractMangas($)
 	});
 
 	return result;
 }
 
-function extractMangas(data) {
-	var $ = cheerio.load(data);
+exports.getMangaIssues = function(id) {
+	var result = getUrl2('http://www.mangareader.net' + id)
+	.then(function(d) {
+		return extractMangaIssues(d);
+	});
+	return result;
+}
+
+function extractMangas($) {
 	var result = [];
 
 	$('.series_alpha li a').each(function(i, e) {				
@@ -73,16 +65,7 @@ function extractMangas(data) {
 	return result;
 }
 
-exports.getMangaIssues = function(id) {
-	var result = getUrl('http://www.mangareader.net' + id)
-	.then(function(d) {
-		return extractMangaIssues(d);
-	});
-	return result;
-}
-
-function extractMangaIssues(data) {
-	var $ = cheerio.load(data);
+function extractMangaIssues($) {
 	var result = [];
 
 	$('#chapterlist tr').each(function(i, e) {	
