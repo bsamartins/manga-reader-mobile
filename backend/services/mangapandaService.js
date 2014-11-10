@@ -13,11 +13,13 @@ exports.getMangaIssues = function(mangaId) {
 
 function getMangasHandler = function(d) {
 	if(!d) {
-		return memcacheService.set('mangas', d)
-			.then(function(d) {
-				return d;
-			});
+		return mangapandaDao.getMangas()
+			.then(cacheMangas);	
 	} else {
 		return d;
 	}
+}
+
+function cacheMangas = function() {
+	return memcacheService.set('mangas', d);
 }
