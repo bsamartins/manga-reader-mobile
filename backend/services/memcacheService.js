@@ -24,3 +24,18 @@ exports.get = function(key) {
 
 	return deferred.promise;
 }
+
+exports.set = function(key, val) {
+	console.log('setting: ', key, val);
+	var deferred = q.defer();
+	
+	client.set(key, val, function(err, val){
+		if(err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve(val);
+		}
+	})
+
+	return deferred.promise;
+}
