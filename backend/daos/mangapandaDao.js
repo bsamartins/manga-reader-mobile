@@ -1,8 +1,8 @@
 var q = require('q');
-var jsdom = require('jsdom');
 var request = require('request');
+var cheerio = require('cheerio');
 
-function getUrl2(uri, parseCallback) {
+function getUrl(uri) {
 	var deferred = q.defer();
 
 	var options = {
@@ -12,44 +12,36 @@ function getUrl2(uri, parseCallback) {
 	request(options, function(error, response, body) {
 		if (error) {
 			deferred.reject(error);
-			console.log('Error when contacting: ', uri);
-			console.log(error);
 			return;	    					    
   		}
 
   		if(response && response.statusCode != 200) {
   			deferred.reject(new Error());
-  			console.log('Error when contacting: ', uri, ' HTTP Status: ', response.statusCode);
 			return;
   		}
 
-		jsdom.env({
-			html: body,
-	  		scripts: ["http://code.jquery.com/jquery.js"],
-	  		done: function (errors, window) {
-	    		var $ = window.$;	    	
-	    		deferred.resolve($);
-	    	}	  	
-		});
-	});
+  		deferred.resolve(body);
+  	});
 
 	return deferred.promise;
 }
 
-exports.getMangas = function() {
-	var result = getUrl2('http://www.mangareader.net/alphabetical')
-	.then(function($) {
-		return extractMangas($)
-	});
+function asJquery(d) {
+	var $ = cheerio.load(d);
+	return $;
+}
 
+exports.getMangas = function() {
+	var result = getUrl('http://www.mangareader.net/alphabetical_')
+	.then(asJquery)
+	.then(extractMangas);
 	return result;
 }
 
 exports.getMangaIssues = function(id) {
-	var result = getUrl2('http://www.mangareader.net' + id)
-	.then(function(d) {
-		return extractMangaIssues(d);
-	});
+	var result = getUrl('http://www.mangareader.net/_' + id)
+	.then(asJquery)
+	.then(extractMangaIssues);
 	return result;
 }
 

@@ -1,5 +1,12 @@
 var mangapandaService = require('./services/mangapandaService.js');
 
+function JsonError(code, message) {
+	return {
+		'code': code,
+		'message': message
+	}
+}
+
 exports.configure = function(app) {
 
 	app.get('/', function(req, res) {
@@ -9,24 +16,22 @@ exports.configure = function(app) {
 	app.get('/mangas', function(req, res) {
 		var result = mangapandaService.getMangas();
 		result.then(function(d) {
-			res.send("<html><body><pre>" + JSON.stringify(d, null, 2) + "</pre></body></html>");
+			res.json(d);
 		}, function(e) {
 			res.statusCode = 500;
-			res.send('There was an error: ' + e);
+			res.json(new JsonError(500, e.message));
 		});
 	});
 
 	app.get('/mangas/:manga*', function(req, res) {
 		var mangaId = req.param('manga');
 
-		console.log(mangaId, unescape(mangaId));
-
 		var result = mangapandaService.getMangaIssues(mangaId);
 		result.then(function(d) {
-			res.send("<html><body><pre>" + JSON.stringify(d, null, 2) + "</pre></body></html>");
+			res.json(d);
 		}, function(e) {
 			res.statusCode = 500;
-			res.send('There was an error: ' + e);
+			res.json(new JsonError(500, e.message));
 		});
 	});
 
