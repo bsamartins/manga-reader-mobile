@@ -15,9 +15,10 @@
   "author": "Bernardo Martins (bsamartins@gmail.com)",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "~0.18.0",
     "express": "^4.10.1",
+    "memjs": "^0.8.5",
     "q": "^1.0.1",
-    "request": "^2.47.0",
-    "cheerio": "~0.18.0"
+    "request": "^2.47.0"
   }
 }

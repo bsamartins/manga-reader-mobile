@@ -1,30 +1,5 @@
-var q = require('q');
-var request = require('request');
 var cheerio = require('cheerio');
-
-function getUrl(uri) {
-	var deferred = q.defer();
-
-	var options = {
-		'uri': uri
-	}
-
-	request(options, function(error, response, body) {
-		if (error) {
-			deferred.reject(error);
-			return;	    					    
-  		}
-
-  		if(response && response.statusCode != 200) {
-  			deferred.reject(new Error());
-			return;
-  		}
-
-  		deferred.resolve(body);
-  	});
-
-	return deferred.promise;
-}
+var httpClient = require('./httpClient.js');
 
 function asJquery(d) {
 	var $ = cheerio.load(d);
@@ -32,14 +7,14 @@ function asJquery(d) {
 }
 
 exports.getMangas = function() {
-	var result = getUrl('http://www.mangareader.net/alphabetical')
+	var result = httpClient.getUrl('http://www.mangareader.net/alphabetical')
 	.then(asJquery)
 	.then(extractMangas);
 	return result;
 }
 
 exports.getMangaIssues = function(id) {
-	var result = getUrl('http://www.mangareader.net/' + id)
+	var result = httpClient.getUrl('http://www.mangareader.net/' + id)
 	.then(asJquery)
 	.then(extractMangaIssues);
 	return result;
