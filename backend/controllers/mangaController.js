@@ -16,7 +16,7 @@ exports.getMangaIssues = function(req, res) {
 
 	console.log('issues');
 
-	var result = mangapandaService.getMangaIssues(mangaId);
+	var result = mangapandaService.getMangaChapters(mangaId);
 	result.then(function(d) {
 		res.json(d);
 	}, function(e) {
@@ -25,18 +25,18 @@ exports.getMangaIssues = function(req, res) {
 	});
 }
 
-exports.getMangaIssue = function(req, res) {
+exports.getMangaChapter = function(req, res) {
 	var mangaId = req.param('manga');
 	var chapterId = req.param('chapter');
 
 	console.log('chapter:', mangaId, ':', chapterId);
 
-	var result = mangapandaService.getMangaIssue(mangaId, chapterId);
+	var result = mangapandaService.getMangaChapter(mangaId, chapterId);
 
 	result.then(function(d) {
 		res.json(d);
 	}, function(e) {
 		res.statusCode = 500;
-		res.json(new JsonError(500, 'Error getting issue'));
+		res.json(new JsonError(500, 'Error getting chapter'));
 	});
 }

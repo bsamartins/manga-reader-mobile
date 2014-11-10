@@ -17,40 +17,44 @@ function asJquery(d) {
 }
 
 exports.getMangas = function() {
-	var result = httpClient.getUrl('http://www.mangareader.net/alphabetical')
+	var result = getMangaPandaResource('/alphabetical')
 	.then(asJquery)
 	.then(extractMangas);
 	return result;
 }
 
-exports.getMangaIssues = function(id) {
-	var result = httpClient.getUrl('http://www.mangareader.net' + id)
+exports.getMangaChapters = function(id) {
+	var result = getMangaPandaResource(id)
 	.then(asJquery)
-	.then(extractMangaIssues);
+	.then(extractMangaChapters);
 	return result;
 }
 
-exports.getMangaIssue = function(id) {
-	var issuePages = [];
+exports.getMangaChapter = function(id) {
+	var chapterPages = [];
 
-	var result = httpClient.getUrl('http://www.mangareader.net' + id)
+	var result = getMangaPandaResource(id)
 	.then(asJquery)
 	.then(function($) {
-		issuePages = extractMangaIssue($);
-		return issuePages;
+		chapterPages = extractMangaChapter($);
+		return chapterPages;
 	})
-	.then(getMangaPages)
+	.then(getMangaChapterPages)
 	.then(asJquery)
 	.then(function(jqArr) {
-		var issueImages = extractPageImages(jqArr);
+		var chapterImages = extractChapterImages(jqArr);
 
-		issuePages.forEach(function(e, i) {
-			e.imageUri = issueImages[i].imageUri;
+		chapterPages.forEach(function(e, i) {
+			e.imageUri = chapterImages[i].imageUri;
 		});
 
-		return issuePages;
+		return chapterPages;
 	});
 	return result;
+}
+
+function getMangaPandaResource(resource) {
+	return httpClient.getUrl('http://www.mangareader.net' + resource);
 }
 
 function extractMangas($) {
@@ -65,7 +69,7 @@ function extractMangas($) {
 	return result;
 }
 
-function extractMangaIssues($) {
+function extractMangaChapters($) {
 	var result = [];
 
 	$('#chapterlist tr').each(function(i, e) {	
@@ -82,7 +86,7 @@ function extractMangaIssues($) {
 	return result;
 }
 
-function extractMangaIssue($) {
+function extractMangaChapter($) {
 	var result = [];
 
 	$('#pageMenu option').each(function(i, e) {	
@@ -94,7 +98,7 @@ function extractMangaIssue($) {
 	return result;
 }
 
-function extractPageImages(jqArr) {
+function extractChapterImages(jqArr) {
 	var result = []
 	jqArr.forEach(function($, i) {
 		result.push({
@@ -104,7 +108,7 @@ function extractPageImages(jqArr) {
 	return result;
 }
 
-function getMangaPages(d) {
+function getMangaChapterPages(d) {
 	var promises = [];
 	d.forEach(function(e) {
 		var promise = httpClient.getUrl('http://www.mangareader.net' + e.uri);

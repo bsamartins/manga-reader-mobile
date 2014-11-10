@@ -16,6 +16,6 @@ exports.configure = function(app) {
 
 	app.get('/manga', mangaController.getMangas);
 	app.get('/manga/:manga', mangaController.getMangaIssues);
-	app.get('/manga/:manga/:chapter', mangaController.getMangaIssue);
+	app.get('/manga/:manga/:chapter', mangaController.getMangaChapter);
 
 }
