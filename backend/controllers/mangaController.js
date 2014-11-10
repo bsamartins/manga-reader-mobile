@@ -27,11 +27,11 @@ exports.getMangaIssues = function(req, res) {
 
 exports.getMangaIssue = function(req, res) {
 	var mangaId = req.param('manga');
-	var issueId = req.param('issue');
+	var chapterId = req.param('chapter');
 
-	console.log('issue:', mangaId, ' : ', issueId);
+	console.log('chapter:', mangaId, ':', chapterId);
 
-	var result = mangapandaService.getMangaIssue(issueId);
+	var result = mangapandaService.getMangaIssue(mangaId, chapterId);
 
 	result.then(function(d) {
 		res.json(d);
