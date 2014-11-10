@@ -32,14 +32,14 @@ function asJquery(d) {
 }
 
 exports.getMangas = function() {
-	var result = getUrl('http://www.mangareader.net/alphabetical_')
+	var result = getUrl('http://www.mangareader.net/alphabetical')
 	.then(asJquery)
 	.then(extractMangas);
 	return result;
 }
 
 exports.getMangaIssues = function(id) {
-	var result = getUrl('http://www.mangareader.net/_' + id)
+	var result = getUrl('http://www.mangareader.net/' + id)
 	.then(asJquery)
 	.then(extractMangaIssues);
 	return result;
