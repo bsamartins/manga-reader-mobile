@@ -14,11 +14,29 @@ exports.getMangas = function (req, res) {
 exports.getMangaIssues = function(req, res) {
 	var mangaId = req.param('manga');
 
+	console.log('issues');
+
 	var result = mangapandaService.getMangaIssues(mangaId);
 	result.then(function(d) {
 		res.json(d);
 	}, function(e) {
 		res.statusCode = 500;
 		res.json(new JsonError(500, 'Error getting issues'));
+	});
+}
+
+exports.getMangaIssue = function(req, res) {
+	var mangaId = req.param('manga');
+	var issueId = req.param('issue');
+
+	console.log('issue:', mangaId, ' : ', issueId);
+
+	var result = mangapandaService.getMangaIssue(issueId);
+
+	result.then(function(d) {
+		res.json(d);
+	}, function(e) {
+		res.statusCode = 500;
+		res.json(new JsonError(500, 'Error getting issue'));
 	});
 }

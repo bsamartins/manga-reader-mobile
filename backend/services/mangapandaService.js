@@ -4,7 +4,6 @@ var memcacheService = require('./memcacheService.js');
 exports.getMangas = function() {
 	return memcacheService.get('mangas')
 		.then(getMangasHandler);
-	//return mangapandaDao.getMangas();
 }
 
 exports.getMangaIssues = function(mangaId) {
@@ -15,6 +14,23 @@ exports.getMangaIssues = function(mangaId) {
 			if(!d) {
 				console.log('cache not found ', key);
 				return mangapandaDao.getMangaIssues(mangaId);	
+			} else {
+				return d;
+			}
+		})
+		.then(function(d){
+			return memcacheService.set(key, d);
+		});
+}
+
+exports.getMangaIssue = function(mangaId, issueId) {
+	var key = 'manga_' + mangaId + '_' + issueId;	
+
+	return memcacheService.get(key)
+		.then(function(d) {
+			if(!d) {
+				console.log('cache not found ', key);
+				return mangapandaDao.getMangaIssue(issueId);	
 			} else {
 				return d;
 			}
