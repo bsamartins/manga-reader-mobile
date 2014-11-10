@@ -26,7 +26,7 @@ exports.get = function(key) {
 }
 
 exports.set = function(key, val) {
-	console.log('setting: ', key, val);
+	console.log('setting: ', key);
 	var deferred = q.defer();
 	
 	client.set(key, val, function(err, val){
