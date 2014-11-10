@@ -18,7 +18,7 @@ exports.get = function(key) {
 		if(err) {
 			deferred.reject(err);
 		} else {			
-			deferred.resolve(Json.parse(val));
+			deferred.resolve(JSON.parse(val));
 		}
 	})
 
@@ -29,7 +29,7 @@ exports.set = function(key, o) {
 	console.log('setting: ', key);
 	var deferred = q.defer();
 	
-	client.set(key, Json.stringify(o), function(err, val){
+	client.set(key, JSON.stringify(o), function(err, val){
 		if(err) {
 			deferred.reject(err);
 		} else {
