@@ -14,7 +14,7 @@ exports.getMangas = function() {
 }
 
 exports.getMangaIssues = function(id) {
-	var result = httpClient.getUrl('http://www.mangareader.net/' + id)
+	var result = httpClient.getUrl('http://www.mangareader.net' + id)
 	.then(asJquery)
 	.then(extractMangaIssues);
 	return result;
