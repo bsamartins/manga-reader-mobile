@@ -13,7 +13,7 @@ exports.getMangaIssues = function(mangaId) {
 	return memcacheService.get(key)
 		.then(function(d) {
 			if(!d) {
-				console.log('cache not found ', 'mangas');
+				console.log('cache not found ', key);
 				return mangapandaDao.getMangaIssues(mangaId);	
 			} else {
 				return d;
