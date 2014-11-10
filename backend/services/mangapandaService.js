@@ -13,6 +13,7 @@ exports.getMangaIssues = function(mangaId) {
 
 function getMangasHandler(d) {
 	if(!d) {
+		console.log('cache key not found ', 'mangas');
 		return mangapandaDao.getMangas()
 			.then(cacheMangasHandler);	
 	} else {
@@ -20,6 +21,7 @@ function getMangasHandler(d) {
 	}
 }
 
-function cacheMangasHandler() {
+function cacheMangasHandler(d) {
+	console.log('caching mangas');
 	return memcacheService.set('mangas', d);
 }
