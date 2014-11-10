@@ -29,7 +29,6 @@ exports.set = function(key, o) {
 	var deferred = q.defer();
 	
 	var value = JSON.stringify(o);
-	console.log('json value: ', value);
 	
 	client.set(key, value, function(err, val){
 		if(err) {
