@@ -6,7 +6,7 @@ exports.getMangas = function() {
 		.then(getMangasHandler);
 }
 
-exports.getMangaIssues = function(mangaId) {
+exports.getMangaChapters = function(mangaId) {
 	var key = 'manga_' + mangaId;
 
 	return memcacheService.get(key)
@@ -23,14 +23,14 @@ exports.getMangaIssues = function(mangaId) {
 		});
 }
 
-exports.getMangaIssue = function(mangaId, issueId) {
-	var key = 'manga_' + mangaId + '_' + issueId;	
+exports.getMangaChapter = function(mangaId, chapterId) {
+	var key = 'manga_' + mangaId + '_' + chapterId;	
 
 	return memcacheService.get(key)
 		.then(function(d) {
 			if(!d) {
 				console.log('cache not found ', key);
-				return mangapandaDao.getMangaIssue(issueId)
+				return mangapandaDao.getMangaChapter(chapterId)
 					.then(function(d){
 						return memcacheService.set(key, d);
 					});
