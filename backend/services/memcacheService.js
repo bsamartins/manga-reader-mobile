@@ -17,23 +17,23 @@ exports.get = function(key) {
 	client.get(key, function(err, val) {
 		if(err) {
 			deferred.reject(err);
-		} else {
-			deferred.resolve(val);
+		} else {			
+			deferred.resolve(Json.parse(val));
 		}
 	})
 
 	return deferred.promise;
 }
 
-exports.set = function(key, val) {
+exports.set = function(key, o) {
 	console.log('setting: ', key);
 	var deferred = q.defer();
 	
-	client.set(key, val, function(err, val){
+	client.set(key, Json.stringify(o), function(err, val){
 		if(err) {
 			deferred.reject(err);
 		} else {
-			deferred.resolve(val);
+			deferred.resolve(o);
 		}
 	})
 
