@@ -11,7 +11,7 @@ exports.getMangaIssues = function(mangaId) {
 	return mangapandaDao.getMangaIssues(mangaId);
 }
 
-function getMangasHandler = function(d) {
+function getMangasHandler(d) {
 	if(!d) {
 		return mangapandaDao.getMangas()
 			.then(cacheMangasHandler);	
@@ -20,6 +20,6 @@ function getMangasHandler = function(d) {
 	}
 }
 
-function cacheMangasHandler = function() {
+function cacheMangasHandler() {
 	return memcacheService.set('mangas', d);
 }
