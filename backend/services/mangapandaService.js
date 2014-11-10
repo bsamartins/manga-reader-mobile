@@ -13,13 +13,13 @@ exports.getMangaIssues = function(mangaId) {
 		.then(function(d) {
 			if(!d) {
 				console.log('cache not found ', key);
-				return mangapandaDao.getMangaIssues(mangaId);	
+				return mangapandaDao.getMangaIssues(mangaId)
+					.then(function(d){
+						return memcacheService.set(key, d);
+					});
 			} else {
 				return d;
 			}
-		})
-		.then(function(d){
-			return memcacheService.set(key, d);
 		});
 }
 
@@ -30,14 +30,14 @@ exports.getMangaIssue = function(mangaId, issueId) {
 		.then(function(d) {
 			if(!d) {
 				console.log('cache not found ', key);
-				return mangapandaDao.getMangaIssue(issueId);	
+				return mangapandaDao.getMangaIssue(issueId)
+					.then(function(d){
+						return memcacheService.set(key, d);
+					});
 			} else {
 				return d;
 			}
-		})
-		.then(function(d){
-			return memcacheService.set(key, d);
-		});
+		});		
 }
 
 function getMangasHandler(d) {
