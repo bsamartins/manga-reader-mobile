@@ -8,12 +8,25 @@ exports.getMangas = function() {
 }
 
 exports.getMangaIssues = function(mangaId) {
-	return mangapandaDao.getMangaIssues(mangaId);
+	var key = 'manga_' + mangaId;
+
+	return memcacheService.get(key)
+		.then(function(d) {
+			if(!d) {
+				console.log('cache not found ', 'mangas');
+				return mangapandaDao.getMangaIssues(mangaId);	
+			} else {
+				return d;
+			}
+		})
+		.then(function(d){
+			return memcacheService.set(key, d);
+		});
 }
 
 function getMangasHandler(d) {
 	if(!d) {
-		console.log('cache key not found ', 'mangas');
+		console.log('cache not found ', 'mangas');
 		return mangapandaDao.getMangas()
 			.then(cacheMangasHandler);	
 	} else {
