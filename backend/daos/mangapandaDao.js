@@ -76,10 +76,14 @@ function extractMangaChapters($) {
 		if(i > 0) {		
 			var cells = $(e).find('td');	
 
+			var chapterFullName = $(cells[0]).text().replace(/\n/g, '');
+			var chapterUri = $(cells[0]).find('a').attr('href');
+			var chapterDatePublished = $(cells[1]).text().replace(/\n/g, '')
+
 			result.push({
-				'name': $(cells[0]).text().replace(/\n/g, ''),
-				'uri': $(cells[0]).find('a').attr('href'),
-				'date': $(cells[1]).text().replace(/\n/g, '')
+				'fullName': chapterFullName,
+				'uri': chapterUri,
+				'datePublished': chapterDatePublished
 			});
 		}
 	});
@@ -90,9 +94,13 @@ function extractMangaChapter($) {
 	var result = [];
 
 	$('#pageMenu option').each(function(i, e) {	
+
+		var pageNumber = $(e).text();
+		var pageUri = $(e).attr('value');
+
 		result.push({
-			'pageNumber': $(e).text(),
-			'uri': $(e).attr('value')
+			'number': pageNumber,
+			'uri': pageUri
 		});
 	});
 	return result;
@@ -101,8 +109,11 @@ function extractMangaChapter($) {
 function extractChapterImages(jqArr) {
 	var result = []
 	jqArr.forEach(function($, i) {
+
+		var imageUri = $('#img').attr('src');
+
 		result.push({
-			'imageUri': $('#img').attr('src')
+			'imageUri': imageUri
 		});
 	});
 	return result;
