@@ -133,3 +133,8 @@ function parseDate(strDate) {
 	var dateParts = strDate.split('/');
 	return new Date(dateParts[2], dateParts[1]-1, dateParts[0]);
 }
+
+function buildId(s) {
+	
+
+}
