@@ -14,8 +14,8 @@ exports.configure = function(app) {
 	});
 */
 
-	app.get('/manga', mangaController.getMangas);
-	app.get('/manga/:manga', mangaController.getMangaIssues);
-	app.get('/manga/:manga/:chapter', mangaController.getMangaChapter);
+	app.get('/services/manga', mangaController.getMangas);
+	app.get('/services/manga/:manga', mangaController.getMangaIssues);
+	app.get('/services/manga/:manga/:chapter', mangaController.getMangaChapter);
 
 }
