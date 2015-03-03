@@ -9,4 +9,12 @@
  * Main module of the application.
  */
 angular
-  .module('mangaReaderMobileApp', []);
+  	.module('mangaReaderMobileApp', [
+  		'ngRoute'
+  	])
+  	.config(function($routeProvider) {
+  		$routeProvider.when('/manga/list', {
+			templateUrl: 'views/mangalist.html',
+  			controller: 'MangalistCtrl'
+		});
+  	});
