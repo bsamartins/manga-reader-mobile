@@ -1,0 +1,4 @@
+<h2>{{ manga.title }}</h2>
+<div ng-repeat="chapter in chapters">
+	<small>[{{ chapter.datePublished }}]</small> <a href="#/manga/{{ manga.id }}/{{ chapter.id }}">{{ chapter.fullName }}</a>
+</div>

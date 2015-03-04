@@ -1,0 +1,14 @@
+<h2>chapter</h2>
+<div>
+	<div class="row">
+		<div class="col-md-6"><a href="javascript:void(0);" ng-click="showPrevious()" ng-show="hasPrevious()">Previous</a></div>
+		<div class="col-md-6 text-right"><a href="javascript:void(0);" ng-click="showNext()" ng-show="hasNext()">Next</a></div>
+	</div>
+	<div ng-swipe-left="showPrevious()" ng-swipe-right="showNext()" class="text-center">
+		<img src="{{ page.imageUri }}">
+	</div>
+	<div class="row">
+		<div class="col-6"><a href="javascript:void(0);" ng-click="showPrevious()" ng-show="hasPrevious()">Previous</a></div>
+		<div class="col-6 text-right"><a href="javascript:void(0);" ng-click="showNext()" ng-show="hasNext()">Next</a></div>
+	</div>
+</div>

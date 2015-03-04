@@ -1,1 +1,7 @@
-<p>This is the mangaList view.</p>
+<h2>Manga List</h2>
+<div ng-repeat="index in list">
+	<h3>{{ index.character }}</h3>
+	<div ng-repeat="manga in index.mangas">
+		<a href="#/manga/{{ manga.id }}">{{ manga.name }}</a>
+	</div>
+</div>

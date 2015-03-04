@@ -8,10 +8,10 @@
  * Controller of the mangaReaderMobileApp
  */
 angular.module('mangaReaderMobileApp')
-  .controller('MangalistCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+	.controller('MangalistCtrl', function ($scope, mangaService) {
+
+		mangaService.mangaListAlphabetically()
+		.then(function(result) {
+			$scope.list = result;
+		});
   });
